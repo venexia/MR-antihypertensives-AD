@@ -29,10 +29,32 @@ write.xlsx(data.frame(st2), file="output/Supplementary_Tables_AntihypertensivesM
 
 # Supplementary Table 3 ======================================================= 
 
-st3 <- fread("data/input_sbp.csv",
+input_sbp <- fread("data/input_sbp.csv",
                    stringsAsFactors = FALSE,
                    data.table = FALSE)
 
+input_sbp <- input_sbp[,c("drug","gene","SNP")]
+
+st3 <- suppressWarnings(extract_outcome_data(input_sbp$SNP,
+                                                   c('UKB-a:360'),
+                                                   proxies = FALSE))
+
+st3 <- st3[,c("SNP","beta.outcome","se.outcome","pval.outcome","eaf.outcome","effect_allele.outcome","other_allele.outcome")]
+colnames(st3) <- c("SNP","beta","se","pvalue","eaf","effect_allele","other_allele")
+st3$unit <- "sd"
+
+st3 <- merge(input_sbp,st3, by=c("SNP"))
+
+ensembl <- fread("data/ensembl_output.txt",
+                   stringsAsFactors = FALSE,
+                   data.table = FALSE)
+
+ensembl <- ensembl[,c("#Uploaded_variation","Allele","AF")]
+colnames(ensembl) <- c("SNP","effect_allele","eaf_1000G")
+ensembl <- unique(ensembl)
+
+st3 <- merge(ensembl,st3, by=c("SNP","effect_allele"))
+  
 write.xlsx(data.frame(st3), file="output/Supplementary_Tables_AntihypertensivesMR.xlsx", 
            sheetName="ST3",append=TRUE, row.names = FALSE, showNA = FALSE)
 
