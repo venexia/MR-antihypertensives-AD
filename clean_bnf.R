@@ -4,7 +4,7 @@ clean_bnf <- function() {
   
   # Load BNF data ===============================================================
   
-  df <- read.xlsx("data/Exposures.xlsx", sheetName = "IncludedExposures")
+  df <- read_excel("data/Exposures.xlsx", sheet = "IncludedExposures")
   
   # Restirct to antihypertensives ===============================================
   
@@ -12,7 +12,7 @@ clean_bnf <- function() {
   
   # Format dataframe ============================================================
   
-  df <- df[,c("Sub.class","Drug.Substance.Name")]
+  df <- df[,c("Sub-class","Drug Substance Name")]
   colnames(df) <- c("drug","substance")
   
   # Remove polypharmacy medines =================================================

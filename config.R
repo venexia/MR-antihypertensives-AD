@@ -1,6 +1,6 @@
 # Set working directory =======================================================
 
-setwd("E:/AntihypertensivesMR")
+setwd("")
 rm(list=ls())
 graphics.off()
 
